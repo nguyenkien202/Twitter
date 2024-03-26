@@ -8,10 +8,11 @@ const port = 3000
 app.post('/', (req, res) => {
   res.send('hello world')
 })
-app.use(defaultErrorHandler)
+
 app.use(express.json())
+app.use('/users', userRouter)
 databaseService.connect();
-app.use('/user', userRouter)
+app.use(defaultErrorHandler)
 app.listen(port, () => {
   console.log(`connet to gateway ${port}`)
 })

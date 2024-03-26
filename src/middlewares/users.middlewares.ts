@@ -1,20 +1,48 @@
+import  USERS_MESSAGES  from './../constants/message';
 import { ErrorWithStatus } from './../models/Error';
 import { validate } from '~/utils/helpers';
 import usersService  from '~/services/users.services';
 import { Request, Response } from 'express'
 import { checkSchema } from 'express-validator'
 import databaseService from '~/services/database.services'
-export const loginValidator = (req: Request, res: Response) => {
-  const { email, password } = req.body
-  if (email === 'nguyenkien66vn@gmail.com' && password === 123) {
-    return res.status(200).json({
-      mes: 'success'
-    })
+import { hashPassword } from '~/utils/crypto';
+export const loginValidator = validate(checkSchema({
+    email:{
+      isEmail:{
+        errorMessage:USERS_MESSAGES.INVALID_EMAIL,
+      },
+      trim:true,
+    custom:{
+      options:async (value,{req})=>{
+        const user = await databaseService.users.findOne({email:value,password:hashPassword(req.body.password)})
+        if(user === null){
+          throw new Error(USERS_MESSAGES.USER_NOT_FOUND)
+        } 
+        req.user = user
+        return true
+      }
+    }
+  },
+  password:{
+    notEmpty:{
+      errorMessage:USERS_MESSAGES.PASSWORD_IS_REQUIRED,
+    },
+    isString:{
+      errorMessage:USERS_MESSAGES.PASSWORD_MUST_BE_A_STRING,
+    },
+    trim:true,
+    // custom:{
+    //   options:async (value)=>{
+    //     const { isExitPassword } : any  = await databaseService.users.findOne({password:value})
+    //     if(isExitPassword  == hashPassword(value)){
+    //       throw new Error('Password is incorrect')
+    //     }
+    //     return true
+    //   }
+    // }
   }
-  return res.status(400).json({
-    error: 'Missing input error'
-  })
-}
+})
+)
 export const registerValidator = validate(checkSchema({
    name:{
     trim:true,
@@ -77,7 +105,8 @@ export const registerValidator = validate(checkSchema({
         minUppercase:1,
         minNumbers:1,
         minSymbols:1,
-      }
+      },
+      errorMessage:USERS_MESSAGES.PASSWORD_MUST_BE_A_STRING,
     },
     custom:{
       options:(value,{req})=>{
