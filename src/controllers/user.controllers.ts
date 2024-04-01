@@ -48,5 +48,14 @@ class UserController {
       })
     }
   }
+  async logoutController(req:Request,res:Response){
+    const { refresh_token } = req.body
+    const result = await usersService.logout(refresh_token)
+    return res.json({
+      message:'deleted success full',
+      data:result
+    })
+  }
 }
+
 export default new UserController()
