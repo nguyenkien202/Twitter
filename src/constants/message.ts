@@ -16,6 +16,11 @@
   PASSWORD_MUST_BE_A_STRONG_PASSWORD:'Password must be a',
   CONFIRM_PASSWORD_IS_REQUIRED:'Confirm Password must be',
   CONFIRM_PASSWORD_MUST_BE_A_STRING:'CONFIRM_PASSWORD_MUST_BE_A_STRING',
-  CONFIRM_PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50:'CONFIRM_PASSW'
-} as const 
+  CONFIRM_PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50:'CONFIRM_PASSW',
+  ACCESS_TOKEN_IS_INVALID:'Access token must be',
+  ACCESS_TOKEN_IS_REQUIRED:'Access token must be a required',
+  REFRESH_TOKEN_IS_REQUIRED:'Refresh token must be a required',
+  REFRESH_TOKEN_IS_INVALID:'Refresh token must be',
+  USED_REFRESH_TOKEN_OR_NOT_EXIT:'refresh token is not exits'
+ } as const 
 export default USERS_MESSAGES 
